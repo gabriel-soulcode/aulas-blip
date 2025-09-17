@@ -86,10 +86,44 @@ function ehPar(num) {
 console.log(ehPar(27));
 
 // Crie uma função que receba um número e retorne o seu fatorial (ex: 5! = 120).
+function calcFatorial(num) {
+    let fatorial = 1;
+    for (let n = num; n >= 1; n--) {
+        fatorial *= n;
+    }
+    return fatorial;
+}
+
+const num = 10;
+// console.log(num + "! = " + fatorial);
+console.log(`${num}! = ${calcFatorial(num)}`);
 
 // Crie uma função que recebe um vetor de números e retorna a média aritmética dos valores.
+function calcMedia(numeros) {
+    let total = 0;
+    for (let n of numeros) {
+        total += n;
+    }
+    const quantidade = numeros.length;
+    return total / quantidade;
+}
+
+const numeros = [24, 36, 72, 80, 56, 12];
+console.log(calcMedia(numeros));
 
 // Crie uma função que recebe uma string e retorna ela invertida (ex: "JavaScript" → "tpircSavaJ").
+function reverter(palavra) {
+    let reverso = "";
+    for (let letra of palavra) {
+        reverso = letra + reverso;
+    }
+    return reverso;
+}
+
+const palavra = "SoulCode";
+console.log(reverter(palavra));
+console.log(reverter("João"));
+
 // Crie uma função que recebe um número e exiba um triângulo formado com "*" com altura especificada pelo parâmetro.
 // altura => 5
 // *
@@ -97,3 +131,14 @@ console.log(ehPar(27));
 // ***
 // ****
 // *****
+function renderizarTorre(altura) {
+    for (let i = 1; i <= altura; i++) {
+        let linha = "";
+        for (let j = 1; j <= i; j++) {
+            linha += " *";
+        }
+        console.log(linha);
+    }
+}
+
+renderizarTorre(10);
