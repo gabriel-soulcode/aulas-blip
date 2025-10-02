@@ -3,6 +3,7 @@ import userRouter from "./routes/users-routes.js";
 import notFoundMiddleware from "./middlewares/not-found-middleware.js";
 import logTimeMiddleware from "./middlewares/log-time-middleware.js";
 import { connection } from "./db/db.js";
+import authRouter from "./routes/auth-routes.js";
 
 connection();
 
@@ -13,6 +14,7 @@ server.use(express.json());
 server.use(logTimeMiddleware);
 
 server.use("/users", userRouter);
+server.use("/auth", authRouter);
 
 server.use(notFoundMiddleware);
 
