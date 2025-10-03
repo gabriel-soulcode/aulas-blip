@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 
-const SECRET = "palavra-super-hiper-mega-secreta";
+const SECRET = process.env.JWT_SECRET;
 
 export default (req, res, next) => {
     const authorization = req.headers.authorization;

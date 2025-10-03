@@ -1,3 +1,4 @@
+import "dotenv/config";
 import express from "express";
 import userRouter from "./routes/users-routes.js";
 import notFoundMiddleware from "./middlewares/not-found-middleware.js";
