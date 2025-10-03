@@ -89,7 +89,7 @@ userRouter.delete("/:id",
         try {
             const id = req.params.id;
             await User.deleteOne({ _id: id });
-            res.status(200).json({ message: "User deleted." });
+            res.status(200).json({ message: "Usuário removido." });
         } catch (error) {
             res.status(500).json({
                 message: "Erro interno no servidor. Tente novamente mais tarde."
