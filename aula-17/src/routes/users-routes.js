@@ -1,4 +1,5 @@
 import express from "express";
+import bcrypt from "bcrypt";
 import User from "../models/user-model.js";
 import { userSchema, userUpdateSchema } from "../validators/user-validator.js";
 import validateSchema from "../middlewares/validate-middleware.js";
@@ -7,10 +8,11 @@ import verifyTokenMiddleware from "../middlewares/verify-token-middleware.js";
 const userRouter = express.Router();
 
 userRouter.post("/",
-    verifyTokenMiddleware,
     validateSchema(userSchema),
     async (req, res) => {
         const data = req.body;
+        const hash = await bcrypt.hash(data.senha, 10);
+        data.senha = hash;
         const user = new User(data);
         const doc = await user.save();
         const userCreated = doc.toObject();
@@ -40,13 +42,18 @@ userRouter.put("/:id",
     validateSchema(userUpdateSchema),
     async (req, res) => {
         const data = req.body;
+        if (data.senha) {
+            data.senha = await bcrypt.hash(data.senha, 10);
+        }
         const id = req.params.id;
         await User.updateOne({ _id: id }, { $set: data });
         const userUpdated = await User.findById(id);
         res.status(200).json(userUpdated);
 });
 
-userRouter.delete("/:id", verifyTokenMiddleware, async (req, res) => {
+userRouter.delete("/:id",
+    verifyTokenMiddleware,
+    async (req, res) => {
     const id = req.params.id;
     await User.deleteOne({ _id: id });
     res.status(200).json({ message: "User deleted." });

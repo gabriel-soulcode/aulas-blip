@@ -1,4 +1,5 @@
 import express from "express";
+import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../models/user-model.js";
 
@@ -15,7 +16,9 @@ authRouter.post("/", async (req, res) => {
         });
     }
 
-    if (senha != user.senha) {
+    const compare = await bcrypt.compare(senha, user.senha);
+
+    if (!compare) {
         return res.status(401).json({
             message: "A senha está incorreta"
         });
