@@ -13,6 +13,9 @@ export default (props) => {
             <Link className="text-white hover:underline" to="/about">Sobre</Link>
           </li>
           <li>
+            <Link className="text-white hover:underline" to="/users">Usuários</Link>
+          </li>
+          <li>
             <Link className="text-white hover:underline" to="/signin">Entrar</Link>
           </li>
           <li>
