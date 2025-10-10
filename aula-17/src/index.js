@@ -1,5 +1,6 @@
 import "dotenv/config";
 import express from "express";
+import cors from "cors";
 import userRouter from "./routes/users-routes.js";
 import notFoundMiddleware from "./middlewares/not-found-middleware.js";
 import logTimeMiddleware from "./middlewares/log-time-middleware.js";
@@ -10,6 +11,8 @@ import prodRouter from "./routes/prods-routes.js";
 connection();
 
 const server = express();
+
+server.use(cors({ origin: "*" }));
 
 server.use(express.json());
 
