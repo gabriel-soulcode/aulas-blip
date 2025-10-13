@@ -3,10 +3,12 @@ import Home from "./pages/Home";
 import About from "./pages/About";
 import NotFound from "./pages/NotFound";
 import Users from "./pages/Users";
+import { Toaster } from "react-hot-toast";
 
 export default () => {
   return (
     <BrowserRouter>
+      <Toaster position="top-right" />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />

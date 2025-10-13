@@ -1,23 +1,34 @@
 import { useEffect, useState } from "react";
 import Header from "../components/Header";
 import axios from "axios";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+
+const regexEmail = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
 
 export default () => {
     const [users, setUsers] = useState(null);
-    const [nome, setNome] = useState("");
+    const { register, handleSubmit, reset, formState: { errors } } = useForm();
 
-    function cadastrarUsuario() {
-        window.alert("Cadastrando usuário")
-    }
-
-    function atualizarNome(event) {
-        const nome = event.target.value;
-        setNome(nome);
+    async function cadastrarUsuario(dados) {
+        try {
+            await axios.post("http://localhost:8080/users", dados);
+            reset();
+            fetchUsers();
+        } catch (error) {
+            console.error(error);
+            toast.error("Algo deu errado. Tente novamente mais tarde.");
+        }
     }
 
     async function fetchUsers() {
-        const response = await axios.get("http://localhost:8080/users");
-        setUsers(response.data);
+        try {
+            const response = await axios.get("http://localhost:8080/users");
+            setUsers(response.data);
+        } catch (error) {
+            console.error(error);
+            toast.error("Algo deu errado. Tente novamente mais tarde.");
+        }
     }
 
     useEffect(() => {
@@ -31,22 +42,32 @@ export default () => {
             <div className="w-full max-w-[1200px] mx-auto p-8">
                 <h1 className="text-2xl font-semibold">Cadastro de Usuário</h1>
 
-                <h2>{nome}</h2>
-
-                <form onSubmit={cadastrarUsuario} className="mt-4">
+                <form onSubmit={handleSubmit(cadastrarUsuario)} className="mt-4">
                     <div className="flex flex-col gap-2 mt-4">
                         <label htmlFor="nome">Nome</label>
-                        <input onChange={atualizarNome} type="text" name="nome" id="nome" className="border-2 border-slate-400 rounded outline-none p-2 focus:border-slate-600" />
+                        <input {...register("nome", {
+                            required: { value: true, message: "O nome é obrigatório." },
+                            minLength: { value: 5, message:  "O nome deve ter no minimo 5 letras." }
+                            })} type="text" id="nome" className="border-2 border-slate-400 rounded outline-none p-2 focus:border-slate-600" />
+                        <small className="text-sm text-red-500">{errors?.nome?.message}</small>
                     </div>
 
                     <div className="flex flex-col gap-2 mt-4">
                         <label htmlFor="email">Email</label>
-                        <input type="text" name="email" id="email" className="border-2 border-slate-400 rounded outline-none p-2 focus:border-slate-600" />
+                        <input {...register("email", {
+                            required: { value: true, message: "O e-mail é obrigatório." },
+                            pattern: { value: regexEmail, message: "O e-mail está inválido." }
+                            })} type="email" id="email" className="border-2 border-slate-400 rounded outline-none p-2 focus:border-slate-600" />
+                        <small className="text-sm text-red-500">{errors?.email?.message}</small>
                     </div>
 
                     <div className="flex flex-col gap-2 mt-4">
                         <label htmlFor="senha">Senha</label>
-                        <input type="text" name="senha" id="senha" className="border-2 border-slate-400 rounded outline-none p-2 focus:border-slate-600" />
+                        <input {...register("senha", {
+                            required: { value: true, message: "A senha é obrigatória." },
+                            minLength: { value: 6, message: "A senha deve ter no minimo 6 caracteres." }
+                            })} type="password" id="senha" className="border-2 border-slate-400 rounded outline-none p-2 focus:border-slate-600" />
+                        <small className="text-sm text-red-500">{errors?.senha?.message}</small>
                     </div>
 
                     <button className="text-white bg-slate-700 hover:bg-slate-800 p-2 rounded cursor-pointer mt-4">Cadastrar</button>
