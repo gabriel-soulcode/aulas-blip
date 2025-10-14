@@ -3,12 +3,15 @@ import Header from "../components/Header";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import useAuth from "../hooks/useAuth";
+import { Navigate } from "react-router-dom";
 
 const regexEmail = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
 
 export default () => {
     const [users, setUsers] = useState(null);
     const { register, handleSubmit, reset, formState: { errors } } = useForm();
+    const { authenticatedUser } = useAuth();
 
     async function cadastrarUsuario(dados) {
         try {
@@ -34,6 +37,10 @@ export default () => {
     useEffect(() => {
         fetchUsers();
     }, []);
+
+    if (!authenticatedUser) {
+        return <Navigate to="/signin" />;
+    }
 
     return (
         <div>
