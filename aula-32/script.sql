@@ -110,3 +110,86 @@ SELECT * FROM cursos ORDER BY carga_horaria DESC LIMIT 1;
 -- Exclua um curso com base no id.
 
 DELETE FROM cursos WHERE id = 7;
+
+
+
+
+SELECT
+	modalidade,
+	COUNT(*) AS quantidade_cursos
+FROM cursos
+GROUP BY modalidade;
+
+SELECT
+	modalidade,
+	MAX(carga_horaria) AS maior_carga_horaria
+FROM cursos
+GROUP BY modalidade;
+
+SELECT
+	modalidade,
+	MIN(carga_horaria) AS menor_carga_horaria
+FROM cursos
+GROUP BY modalidade;
+
+SELECT
+	modalidade,
+	SUM(carga_horaria) AS total_carga_horaria
+FROM cursos
+GROUP BY modalidade;
+
+SELECT
+	modalidade,
+	AVG(carga_horaria) AS media_carga_horaria
+FROM cursos
+GROUP BY modalidade;
+
+SELECT * FROM alunos WHERE nome = "Davi";
+
+SELECT * FROM alunos WHERE peso < 70 AND matricula > 124;
+
+SELECT * FROM cursos WHERE NOT (carga_horaria >= 250 OR modalidade = "Online");
+
+SELECT * FROM alunos WHERE matricula IN (124, 125, 126);
+
+SELECT * FROM alunos WHERE id NOT IN (1, 2, 3);
+
+SELECT * FROM cursos WHERE carga_horaria BETWEEN 250 AND 300;
+
+SELECT * FROM alunos WHERE peso NOT BETWEEN 60 AND 70;
+
+SELECT * FROM alunos
+WHERE YEAR(data_nascimento) = '1995'
+AND MONTH(data_nascimento) BETWEEN 1 AND 3;
+
+SELECT * FROM alunos WHERE nome LIKE "Ma%";
+
+SELECT * FROM alunos WHERE nome LIKE "%a";
+
+SELECT * FROM alunos WHERE nome LIKE "%r%";
+
+SELECT * FROM alunos WHERE peso IS NOT NULL;
+
+SELECT NOW() AS agora;
+
+SELECT *, YEAR(data_nascimento) ano_nascimento FROM alunos;
+
+SELECT YEAR(NOW()) - YEAR(data_nascimento) AS idade FROM alunos;
+
+SELECT LOWER(nome), UPPER(nome) FROM alunos;
+
+SELECT CONCAT(nome, " ", modalidade) FROM cursos;
+
+SELECT CHAR_LENGTH(nome) FROM cursos;
+
+SELECT * FROM cursos WHERE CHAR_LENGTH(nome) > 35;
+
+SELECT ABS(200 - 300);
+
+SELECT ROUND(AVG(carga_horaria)) FROM cursos;
+
+SELECT * FROM alunos WHERE id = ROUND(RAND() * 7);
+
+SELECT * FROM cursos WHERE carga_horaria > (
+	SELECT AVG(carga_horaria) FROM cursos
+);
