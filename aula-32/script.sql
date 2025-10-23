@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS alunos (
     nome VARCHAR(150) NOT NULL,
     data_nascimento DATE,
     peso FLOAT DEFAULT 0
-);
+) ENGINE = InnoDB;
 
 DESCRIBE alunos;
 
@@ -59,12 +59,14 @@ FROM alunos;
 -- carga_horaria (inteiro, obrigatório)
 -- modalidade (texto, podendo armazenar “Presencial” ou “Online”)
 
+DROP TABLE cursos;
+
 CREATE TABLE IF NOT EXISTS cursos (
 	id INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(200) NOT NULL,
     carga_horaria INT NOT NULL,
     modalidade ENUM("Presencial", "Online") DEFAULT "Presencial"
-);
+) ENGINE = InnoDB;
 
 DESCRIBE cursos;
 
@@ -193,3 +195,41 @@ SELECT * FROM alunos WHERE id = ROUND(RAND() * 7);
 SELECT * FROM cursos WHERE carga_horaria > (
 	SELECT AVG(carga_horaria) FROM cursos
 );
+
+
+
+CREATE TABLE IF NOT EXISTS inscricoes (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+    id_aluno INT NOT NULL,
+    id_curso INT NOT NULL,
+    FOREIGN KEY (id_aluno) REFERENCES alunos (id),
+    FOREIGN KEY (id_curso) REFERENCES cursos (id)
+) ENGINE = InnoDB;
+
+DESCRIBE inscricoes;
+
+SELECT * FROM alunos;
+
+SELECT * FROM cursos;
+
+INSERT INTO inscricoes (id_aluno, id_curso)
+VALUES (1, 4), (2, 1), (3, 1), (3, 6), (4, 7);
+
+SELECT * FROM inscricoes;
+
+SELECT * FROM alunos WHERE id IN (
+	SELECT id_aluno FROM inscricoes WHERE id_curso = 1
+);
+
+SELECT a.*, c.* FROM alunos a
+JOIN inscricoes i ON a.id = i.id_aluno
+JOIN cursos c ON c.id = i.id_curso;
+
+SELECT * FROM cursos c
+LEFT JOIN inscricoes i ON c.id = i.id_curso;
+
+SELECT a.* FROM alunos a
+JOIN inscricoes i ON a.id = i.id_aluno
+JOIN cursos c ON c.id = i.id_curso
+WHERE c.nome LIKE "%programação%";
+
